@@ -16,12 +16,12 @@ this is the largest empty circle, and it's midpoint is the point farthest away f
 ## Results
 
 The farthest point away from any quiktrip, based on the (somewhat arbitrary) rules I set up is
-[2151 S Peoria Ave](https://www.google.com/maps/place/2151+S+Peoria+Ave/@36.1315582,-95.9756482,17z/data=!3m1!4b1!4m2!3m1!1s0x87b6eca3a681717f:0xd8c6e83ed7013624).
-This point is 1.15 miles away from the QuikTrips on 15th & Denver, 11th & Utica and 36th & Peoria.  
+[7819 S Evanston Ave](https://www.google.com/maps/place/36%C2%B002%2755.0%22N+95%C2%B056%2745.6%22W/@36.0485963,-95.9459906,15z/data=!4m2!3m1!1s0x0:0x0).
+This point is 1.95 miles away from the QuikTrips on 61ST & Lewis, E.71ST ST. S. & Riverside DR. and 91ST & Yale.  
 
 ## Next Steps
 I can probably give this a bit more rigor by using the data for 10 miles within 74135, then using some bounds 
-(probably something like US 75, US 169, Creek Turnpike, Independence St), 
+(probably something like US 75, US 169, Creek Turnpike, Some Northern boundary), 
 or use the actual boundaries of the city of Tulsa and use a convex hull as my boundary.
 Also, this could probably use a Voronoi diagram and get a pretty picture to boot.
 
