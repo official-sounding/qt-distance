@@ -48,7 +48,7 @@ public class StatRetriever {
             zero.setY(0);
 
 
-            //these are hardcoded at the moment, should probably just be found
+            //these are hardcoded at the moment, could probably be better
             zero.setLongitude(-96.010);
             zero.setLatitude(36.030);
 
@@ -63,13 +63,6 @@ public class StatRetriever {
 
             max.setX(max.getLatitude() - zero.getLatitude());
             max.setY(max.getLongitude() - zero.getLongitude());
-
-            for(QT a: locations) {
-                System.out.println(a.getLatitude()+" "+a.getLongitude());
-                System.out.println(a.getX() +" "+a.getY());
-                System.out.println("+++");
-            }
-
 
             double maxradius = 0;
             QT farthest = new QT();
@@ -95,7 +88,7 @@ public class StatRetriever {
                             double x = (mr * mt * (y3 - y1) +(mr * (x2 + x3)) - mt*(x1 + x2)) / (2 * (mr - mt));
                             double y = (-1 / mr) * (x - ((x1 + x2)/2)) + ((y1 + y2) / 2);
 
-                            double r = sqrt(pow((x2 - x1),2) + pow((y2 - y1),2));
+                            double r = sqrt(pow((x2 - x),2) + pow((y2 - y),2));
 
                             //validate
 
@@ -112,13 +105,42 @@ public class StatRetriever {
                                 }
                             }
 
-                            //if largest radius found so far, record
-                            if(inside && empty && r > maxradius) {
-                                maxradius = r;
-                                farthest = new QT();
-                                farthest.setX(x);
-                                farthest.setY(y);
-                                farthest.setIntersection(a.getIntersection()+" and "+b.getIntersection()+" and "+c.getIntersection());
+                            //if valid
+                            if(inside && empty) {
+
+                                double lat = (zero.getLatitude() + x);
+                                double lng = (zero.getLongitude() + y);
+
+                                // print details to stderr
+                                System.err.println(a.getIntersection()+" and "+b.getIntersection()+" and "+c.getIntersection());
+                                System.err.println(lat+","+lng);
+
+                                //calculate haversine distance between the center and a point on the edge
+
+                                double sig1 = toRadians(lat);
+                                double sig2 = a.getLatRadians();
+
+                                double deltasig = toRadians(lat - a.getLatitude());
+                                double deltalam = toRadians(lng - a.getLongitude());
+
+                                double ha = sin(deltasig/2) * sin(deltasig/2) +cos(sig1)*cos(sig2) *sin(deltalam/2)*sin(deltalam/2);
+
+                                double hc = 2 * atan2(sqrt(ha), sqrt(1 - ha));
+
+                                //turn radius into miles
+                                double radius = 6371 * hc *0.62;
+
+                                System.err.println("Radius in miles: "+radius);
+
+
+
+                                if(radius > maxradius) {
+                                    maxradius = radius;
+                                    farthest = new QT();
+                                    farthest.setX(x);
+                                    farthest.setY(y);
+                                    farthest.setIntersection(a.getIntersection() + " and " + b.getIntersection() + " and " + c.getIntersection());
+                                }
                             }
                         }
                     }
@@ -127,6 +149,7 @@ public class StatRetriever {
 
 
             //display intersection set, lat & long of farthest point
+            System.out.println("=========");
             System.out.println(farthest.getIntersection());
             System.out.println((zero.getLatitude() + farthest.getX())+","+(zero.getLongitude() + farthest.getY()));
             System.out.println(maxradius);
